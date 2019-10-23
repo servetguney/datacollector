@@ -15,7 +15,7 @@ def connect_mongo(ip,port:int):
 def connect_db(client,db,collection):
     try:
         dbname = client[db]
-        coll = dbname[collection]
+        coll = dbname.vars()[collection]
         print(coll)
         return coll
     except Exception as e:
@@ -38,5 +38,7 @@ if __name__ == '__main__':
         data = json.load(json_file)
         for source in data['DataSources']['Source']:
             make_request(source['ticker_url'])
+            print(source['database'])
+            print(source['collection'])
             post = connect_db(connect_mongo('10.8.8.1',27017), source['database'], source['collection'] )
     print(post.find_one())
