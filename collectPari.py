@@ -5,8 +5,7 @@ import requests
 from timeloop import Timeloop
 from datetime import timedelta
 
-mydata = {}
-post = ""
+
 
 def connect_mongo(ip,port:int):
     try:
@@ -38,19 +37,11 @@ tl = Timeloop()
 
 
 @tl.job(interval=timedelta(seconds=10))
-def job_daily(post,mydata):
+def job_daily():
+    mydata = {}
     try:
-        print(mydata)
-        post.insert_one(mydata)
-    except Exception as e:
-        print("Can not insert %s".format(e))
-
-
-
-if __name__ == '__main__':
-
-    with open('configuration_source.json') as json_file:
-        data = json.load(json_file)
+        with open('configuration_source.json') as json_file:
+            data = json.load(json_file)
         for source in data['DataSources']['Source']:
             array = make_request(source['ticker_url'])
             mydata['contentTitle']= source['collection']
@@ -62,5 +53,16 @@ if __name__ == '__main__':
             post.insert_one(mydata)
             for sample in post.find():
                 print(sample)
+            print(mydata)
+            post.insert_one(mydata)
+            
+    except Exception as e:
+        print("Can not insert %s".format(e))
+
+
+
+if __name__ == '__main__':
+
+
 
     tl.start(block=True)
