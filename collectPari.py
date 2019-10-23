@@ -5,6 +5,8 @@ import requests
 from timeloop import Timeloop
 from datetime import timedelta
 
+mydata = {}
+post = ""
 
 def connect_mongo(ip,port:int):
     try:
@@ -46,7 +48,7 @@ def job_daily(post,mydata):
 
 
 if __name__ == '__main__':
-    mydata = {}
+
     with open('configuration_source.json') as json_file:
         data = json.load(json_file)
         for source in data['DataSources']['Source']:
