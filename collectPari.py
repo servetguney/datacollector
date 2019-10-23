@@ -15,8 +15,8 @@ def connect_mongo(ip,port:int):
 
 def connect_db(client,db,collection):
     try:
-        dbclient = client[db]
-        coll = dbclient[collection]
+        dbname = client[db]
+        coll = dbname[collection]
         print(coll)
         return coll
     except Exception as e:
