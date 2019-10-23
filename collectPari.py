@@ -2,7 +2,8 @@ from pymongo import MongoClient
 import json
 import time
 import requests
-import timeloop
+from timeloop import Timeloop
+from datetime import timedelta
 
 
 def connect_mongo(ip,port:int):
@@ -31,10 +32,21 @@ def make_request(address):
         time.sleep(5)
         make_request(address)
 
-if __name__ == '__main__':
-    print("Test")
-    mydata = {}
+tl = Timeloop()
 
+
+@tl.job(interval=timedelta(seconds=10))
+def job_daily(post,mydata):
+    try:
+        print(mydata)
+        post.insert_one(mydata)
+    except Exception as e:
+        print("Can not insert %s".format(e))
+
+
+
+if __name__ == '__main__':
+    mydata = {}
     with open('configuration_source.json') as json_file:
         data = json.load(json_file)
         for source in data['DataSources']['Source']:
@@ -49,3 +61,4 @@ if __name__ == '__main__':
             for sample in post.find():
                 print(sample)
 
+    tl.start(block=True)
