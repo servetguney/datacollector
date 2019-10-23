@@ -26,4 +26,4 @@ if __name__ == '__main__':
         data = json.load(json_file)
         for source in data['DataSources']['Source']:
             print(source['subentity'])
-    connect_db(connect_mongo('127.0.0.6',27000),"posts")
+    connect_db(connect_mongo('127.0.0.1',27017),"posts")
