@@ -1,23 +1,29 @@
 from pymongo import MongoClient
+import pymongo
+import json
+import timeloop
 
-client = MongoClient('10.8.8.1', 27017)
-db = client.pymongo_test
-posts = db.posts
 
-post_1 = {
-    'title': 'Python and MongoDB',
-    'content': 'PyMongo is fun, you guys',
-    'author': 'Scott'
-}
-post_2 = {
-    'title': 'Virtual Environments',
-    'content': 'Use virtual environments, you guys',
-    'author': 'Scott'
-}
-post_3 = {
-    'title': 'Learning Python',
-    'content': 'Learn Python, it is easy',
-    'author': 'Bill'
-}
-new_result = posts.insert_many([post_1, post_2, post_3])
-print('Multiple posts: {0}'.format(new_result.inserted_ids))
+def connect_mongo(ip,port:int):
+    try:
+        client = MongoClient(ip,port)
+    except Exception as e:
+        print(e)
+    return client
+
+def connect_db(client,db):
+    try:
+        post = client.db
+        print(post)
+        
+    except Exception as e:
+        print(e)
+
+if __name__ == '__main__':
+    print("Test")
+
+    with open('configuration.json') as json_file:
+        data = json.load(json_file)
+        for source in data['DataSources']['Source']:
+            print(source['subentity'])
+    connect_db(connect_mongo('127.0.0.6',27000),"posts")

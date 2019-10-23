@@ -1,0 +1,7 @@
+{
+  "DataSources": {
+    "Source": [{"Site": "wwww.",
+      "Schedule": "daily",
+      "subentity": ["default"]}]
+  }
+}
