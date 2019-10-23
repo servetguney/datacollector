@@ -22,7 +22,7 @@ def connect_db(client,db):
 if __name__ == '__main__':
     print("Test")
 
-    with open('configuration.json') as json_file:
+    with open('configuration_source.json') as json_file:
         data = json.load(json_file)
         for source in data['DataSources']['Source']:
             print(source['subentity'])
