@@ -15,7 +15,7 @@ def connect_db(client,db):
     try:
         post = client.db
         print(post)
-        
+
     except Exception as e:
         print(e)
 
