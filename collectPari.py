@@ -38,5 +38,5 @@ if __name__ == '__main__':
         data = json.load(json_file)
         for source in data['DataSources']['Source']:
             make_request(source['ticker_url'])
-            post=connect_db(connect_mongo('127.0.0.1',27017),source['database'],source['collection'])
+            post = connect_db(connect_mongo('127.0.0.1',27017), source['database'], source['collection'] )
     print(post.find_one())
