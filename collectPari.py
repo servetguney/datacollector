@@ -28,3 +28,4 @@ if __name__ == '__main__':
     post=connect_db(connect_mongo('127.0.0.1',27017),"pymongo_test","posts")
     mydict = {"name": "Peter", "address": "Lowstreet 27"}
     post.insert_one(mydict)
+    print(post.find())
