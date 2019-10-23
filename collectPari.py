@@ -15,7 +15,7 @@ def connect_mongo(ip,port:int):
 def connect_db(client,db,collection):
     try:
         dbname = client[db]
-        coll = dbname.vars()[collection]
+        coll = dbname[collection]
         print(coll)
         return coll
     except Exception as e:
@@ -25,7 +25,7 @@ def make_request(address):
     try:
         r = requests.request(method='GET', url=address)
         array = r.json()
-        print(array)
+        return array
     except Exception as e:
         print(e)
         time.sleep(5)
@@ -33,12 +33,19 @@ def make_request(address):
 
 if __name__ == '__main__':
     print("Test")
+    mydata = {}
 
     with open('configuration_source.json') as json_file:
         data = json.load(json_file)
         for source in data['DataSources']['Source']:
-            make_request(source['ticker_url'])
+            array = make_request(source['ticker_url'])
+            mydata['contentTitle']= source['collection']
+            mydata['timestamp']= time.ctime()
+            mydata['content']  = array
             print(source['database'])
             print(source['collection'])
             post = connect_db(connect_mongo('10.8.8.1',27017), source['database'], source['collection'] )
-    print(post.find_one())
+            post.insert_one(mydata)
+            sample=post.find().limit(5)
+            print(sample)
+
