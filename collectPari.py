@@ -17,6 +17,7 @@ def connect_db(client,db,collection):
     try:
         dbclient = client[db]
         coll = dbclient[collection]
+        print(coll)
         return coll
     except Exception as e:
         print(e)
