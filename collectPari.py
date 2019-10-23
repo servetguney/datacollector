@@ -11,9 +11,9 @@ def connect_mongo(ip,port:int):
         print(e)
     return client
 
-def connect_db(client,db):
+def connect_db(client,db,collection):
     try:
-        post = client.db
+        post = client.db.collection
         return post
     except Exception as e:
         print(e)
@@ -25,6 +25,6 @@ if __name__ == '__main__':
         data = json.load(json_file)
         for source in data['DataSources']['Source']:
             print(source['subentity'])
-    post=connect_db(connect_mongo('127.0.0.1',27017),"posts")
+    post=connect_db(connect_mongo('127.0.0.1',27017),"pymongo_test","posts")
     mydict = {"name": "Peter", "address": "Lowstreet 27"}
     post.insert_one(mydict)
