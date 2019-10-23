@@ -1,7 +1,15 @@
 {
   "DataSources": {
-    "Source": [{"Site": "wwww.",
-      "Schedule": "daily",
-      "subentity": ["default"]}]
+    "Source": [
+      {
+        "database": "pari",
+        "collection": "pari",
+        "type": "daily",
+        "date": "None",
+        "ticker_url": "https://www.paribu.com/ticker",
+        "schedule": "daily",
+        "subentity": ["default"]
+      }
+    ]
   }
 }
