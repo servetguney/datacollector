@@ -55,7 +55,7 @@ def job_daily():
                 print(sample)
             print(mydata)
             post.insert_one(mydata)
-            
+
     except Exception as e:
         print("Can not insert %s".format(e))
 
