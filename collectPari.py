@@ -46,6 +46,6 @@ if __name__ == '__main__':
             print(source['collection'])
             post = connect_db(connect_mongo('10.8.8.1',27017), source['database'], source['collection'] )
             post.insert_one(mydata)
-            sample=post.find().limit(5)
-            print(sample)
+            for sample in post.find():
+                print(sample)
 
