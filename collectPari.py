@@ -51,12 +51,12 @@ def job_daily():
                 mydata = {}
                 mydata['source'] = source['tag']
                 mydata['time'] = time.ctime()
+                if type(array) == list :
+                    array = array[0]
                 mydata['data'] = array
                 print(post.insert_one(mydata).inserted_id)
     except Exception as e:
         print(e)
-
-
 
 if __name__ == '__main__':
     tl.start(block=True)
