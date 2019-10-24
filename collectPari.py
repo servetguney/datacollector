@@ -38,7 +38,7 @@ def make_request(address):
 tl = Timeloop()
 
 
-@tl.job(interval=timedelta(seconds=21600))
+@tl.job(interval=timedelta(seconds=86400))
 def job_daily():
     try:
         print("This is the daily ( 4 Hours ) period")
@@ -61,7 +61,7 @@ def job_daily():
 
 
 
-@tl.job(interval=timedelta(seconds=60))
+@tl.job(interval=timedelta(seconds=3600))
 def job_daily():
     try:
         print("This is the 60 sec period")
