@@ -26,7 +26,9 @@ def connect_db(client,db,collection):
 def make_request(address):
     try:
         r = requests.request(method='GET', url=address)
+        print(address)
         array = r.json()
+        print(array)
         return array
     except Exception as e:
         print(e)
@@ -47,10 +49,10 @@ def job_daily():
                 array = make_request(source['ticker_url'])
                 post = connect_db(connect_mongo('10.8.8.1', 27017), source['database'], source['collection'])
                 mydata = {}
-                mydata['source']= source['tag']
+                mydata['source'] = source['tag']
                 mydata['time'] = time.ctime()
                 mydata['data'] = array
-                print(post.insert_one(mydata).inserted_id())
+                print(post.insert_one(mydata).inserted_id)
     except Exception as e:
         print(e)
 
