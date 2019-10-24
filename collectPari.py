@@ -43,16 +43,13 @@ def job_daily():
         with open('configuration_source.json') as json_file:
             data = json.load(json_file)
         for source in data['DataSources']['Source']:
+            print(source)
             if source['type'] == "daily":
-                print(source)
                 array = make_request(source['ticker_url'])
                 mydata['contentTitle'] = source['tag']
-                mydata['timestamp']= time.ctime()
+                mydata['timestamp'] = time.ctime()
                 mydata['content']  = array
                 post = connect_db(connect_mongo('10.8.8.1',27017), source['database'], source['collection'] )
-                post.insert_one(mydata)
-                for sample in post.find():
-                    print(sample)
                 post.insert_one(mydata)
     except Exception as e:
         print("Can not insert %s".format(e))
