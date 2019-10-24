@@ -38,7 +38,7 @@ def make_request(address):
 tl = Timeloop()
 
 
-@tl.job(interval=timedelta(seconds=10))
+@tl.job(interval=timedelta(seconds=21600))
 def job_daily():
     try:
         with open('configuration_source.json') as json_file:
