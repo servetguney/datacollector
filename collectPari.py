@@ -51,7 +51,7 @@ def job_daily():
                 mydata = {}
                 mydata['source'] = source['tag']
                 mydata['time'] = time.ctime()
-                if type(array) == list :
+                if type(array) == list:
                     array = array[0]
                 mydata['data'] = array
                 print(post.insert_one(mydata).inserted_id)
