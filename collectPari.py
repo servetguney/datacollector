@@ -58,5 +58,27 @@ def job_daily():
     except Exception as e:
         print(e)
 
+
+
+@tl.job(interval=timedelta(seconds=60))
+def job_daily():
+    try:
+        with open('configuration_source.json') as json_file:
+            data = json.load(json_file)
+        for source in data['DataSources']['Source']:
+            if source['type'] == "daily":
+                array = make_request(source['ticker_url'])
+                post = connect_db(connect_mongo('10.8.8.1', 27017), source['database'], source['collection'])
+                mydata = {}
+                mydata['source'] = source['tag']
+                mydata['time'] = time.ctime()
+                if type(array) == list:
+                    array = array[0]
+                mydata['data'] = array
+                print(post.insert_one(mydata).inserted_id)
+    except Exception as e:
+        print(e)
+
+
 if __name__ == '__main__':
     tl.start(block=True)
