@@ -43,9 +43,10 @@ def job_daily():
         with open('configuration_source.json') as json_file:
             data = json.load(json_file)
         for source in data['DataSources']['Source']:
-            if data['DataSources']['Source']['type'] == "daily":
+            if source['type'] == "daily":
+                print(source)
                 array = make_request(source['ticker_url'])
-                mydata['contentTitle']= source['tag']
+                mydata['contentTitle'] = source['tag']
                 mydata['timestamp']= time.ctime()
                 mydata['content']  = array
                 post = connect_db(connect_mongo('10.8.8.1',27017), source['database'], source['collection'] )
