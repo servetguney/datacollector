@@ -41,6 +41,7 @@ tl = Timeloop()
 @tl.job(interval=timedelta(seconds=21600))
 def job_daily():
     try:
+        print("This is the daily ( 4 Hours ) period")
         with open('configuration_source.json') as json_file:
             data = json.load(json_file)
         for source in data['DataSources']['Source']:
@@ -63,6 +64,7 @@ def job_daily():
 @tl.job(interval=timedelta(seconds=60))
 def job_daily():
     try:
+        print("This is the 60 sec period")
         with open('configuration_source.json') as json_file:
             data = json.load(json_file)
         for source in data['DataSources']['Source']:
