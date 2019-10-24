@@ -52,7 +52,7 @@ def job_daily():
                 post = connect_db(connect_mongo('10.8.8.1',27017), source['database'], source['collection'] )
                 post.insert_one(mydata)
     except Exception as e:
-        print("Can not insert %s".format(e))
+        print(e)
 
 
 
