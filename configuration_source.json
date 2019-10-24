@@ -20,6 +20,16 @@
         "ticker_url": "https://www.btcturk.com/api/ticker",
         "schedule": "daily",
         "subentity": ["default"]
+      },
+      {
+        "database": "currency",
+        "collection": "crypto",
+        "tag": "koinim",
+        "type": "daily",
+        "date": "None",
+        "ticker_url": "https://koinim.com/api/v1/ticker/BTC_TRY/",
+        "schedule": "daily",
+        "subentity": ["default"]
       }
     ]
   }
