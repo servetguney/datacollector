@@ -2,11 +2,22 @@
   "DataSources": {
     "Source": [
       {
-        "database": "pari",
-        "collection": "pari",
+        "database": "currency",
+        "collection": "crypto",
+        "tag": "pari",
         "type": "daily",
         "date": "None",
         "ticker_url": "https://www.paribu.com/ticker",
+        "schedule": "daily",
+        "subentity": ["default"]
+      },
+      {
+        "database": "currency",
+        "collection": "crypto",
+        "tag": "btcturk",
+        "type": "daily",
+        "date": "None",
+        "ticker_url": "https://www.btcturk.com/api/ticker",
         "schedule": "daily",
         "subentity": ["default"]
       }
