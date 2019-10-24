@@ -46,7 +46,11 @@ def job_daily():
             if source['type'] == "daily":
                 array = make_request(source['ticker_url'])
                 post = connect_db(connect_mongo('10.8.8.1', 27017), source['database'], source['collection'])
-                post.insert_one([source['tag'], time.ctime(), array])
+                mydata = {}
+                mydata['source']= source['tag']
+                mydata['time'] = time.ctime()
+                mydata['data'] = array
+                print(post.insert_one(mydata).inserted_id())
     except Exception as e:
         print(e)
 
