@@ -14,6 +14,16 @@
       {
         "database": "currency",
         "collection": "crypto",
+        "tag": "pari",
+        "type": "hourly",
+        "date": "None",
+        "ticker_url": "https://www.paribu.com/ticker",
+        "schedule": "daily",
+        "subentity": ["default"]
+      },
+      {
+        "database": "currency",
+        "collection": "crypto",
         "tag": "btcturk",
         "type": "daily",
         "date": "None",
