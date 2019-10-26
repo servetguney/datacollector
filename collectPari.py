@@ -33,7 +33,7 @@ def make_request(address):
         make_request(address)
 
 
-def add_log(source,log):
+def add_log(source, log):
     post = connect_db(connect_mongo('10.8.8.1', 27017), source['database'], 'log')
     post.insert(log)
 
@@ -41,13 +41,13 @@ def add_log(source,log):
 tl = Timeloop()
 
 
-@tl.job(interval=timedelta(seconds=3650))
+@tl.job(interval=timedelta(seconds=30))
 def job_info():
     with open('configuration_source.json') as json_file:
         data = json.load(json_file)
         for source in data['DataSources']['Source']:
             post = connect_db(connect_mongo('10.8.8.1', 27017), source['database'], 'log')
-            post.find().sort({'$natural':1}).limit(5)
+            post.find({'tag': source['tag']}).sort({'$natural': 1}).limit(5)
 
 
 @tl.job(interval=timedelta(seconds=86400))
@@ -67,6 +67,7 @@ def job_daily():
                     array = array[0]
                 mydata['data'] = array
                 post.insert_one(mydata)
+                add_log(source, [mydata['source'], mydata['time'], mydata['type']])
     except Exception as e:
         print(e)
 
@@ -88,6 +89,7 @@ def job_hourly():
                     array = array[0]
                 mydata['data'] = array
                 post.insert_one(mydata)
+                add_log(source, [mydata['source'], mydata['time'], mydata['type']])
     except Exception as e:
         print(e)
 
