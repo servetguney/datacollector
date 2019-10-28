@@ -137,6 +137,7 @@ def job_daily():
     except Exception as e:
         print(e)
 
+
 @tl.job(interval=timedelta(seconds=3600))
 def job_hourly():
     try:
