@@ -43,69 +43,73 @@ def add_log(source, collection ,log):
 
 
 def get_ticker_data(array, source: dict):
-    mydata = {}
+    mylist = []
     if (source['dtype'] == "dict") and (source["dformat"]== "Multiple"):
         for i in array.keys():
-            mydata['tag'] = source['tag']
-            mydata['type'] = source['type']
-            mydata['schedule'] = source['schedule']
-            mydata["pair"] = i
-            mydata["data"] = array[i]
-            mydata['Y'] = datetime.now().year
-            mydata['M'] = datetime.now().month
-            mydata['D'] = datetime.now().day
-            mydata['H'] = datetime.now().hour
-            mydata['MN'] = datetime.now().minute
-            mydata['S'] = datetime.now().second
-        return mydata
+            mylist.append({
+                'tag': source['tag'],
+                'type': source['type'],
+                'schedule': source['schedule'],
+                'pair': i,
+                'data': array[i],
+                'Y': datetime.now().year,
+                'M': datetime.now().month,
+                'D': datetime.now().day,
+                'H': datetime.now().hour,
+                'MN': datetime.now().minute,
+                'S': datetime.now().second
+            })
+        return mylist
     elif source['dtype'] == "list" and (source["dformat"] == "Multiple"):
         for i in array:
-            mydata['tag'] = source['tag']
-            mydata['type'] = source['type']
-            mydata['schedule'] = source['schedule']
-            mydata["pair"] = i["pair"]
-            mydata["data"] = i
-            mydata['Y'] = datetime.now().year
-            mydata['M'] = datetime.now().month
-            mydata['D'] = datetime.now().day
-            mydata['H'] = datetime.now().hour
-            mydata['MN'] = datetime.now().minute
-            mydata['S'] = datetime.now().second
-        return mydata
+            mylist.append({
+                'tag': source['tag'],
+                'type': source['type'],
+                'schedule': source['schedule'],
+                'pair': i["pair"],
+                'data': i,
+                'Y': datetime.now().year,
+                'M': datetime.now().month,
+                'D': datetime.now().day,
+                'H': datetime.now().hour,
+                'MN': datetime.now().minute,
+                'S': datetime.now().second
+            })
+        return mylist
     elif source['dtype'] == "dict" and (source["dformat"] == "Single"):
         for i in array:
             subarray = make_request(source["market_url"]+i+"/")
-            mydata['tag'] = source['tag']
-            mydata['type'] = source['type']
-            mydata['schedule'] = source['schedule']
-            mydata["pair"] = i
-            mydata["data"] = subarray
-            mydata['Y'] = datetime.now().year
-            mydata['M'] = datetime.now().month
-            mydata['D'] = datetime.now().day
-            mydata['H'] = datetime.now().hour
-            mydata['MN'] = datetime.now().minute
-            mydata['S'] = datetime.now().second
-        return mydata
+            mylist.append({
+                'tag': source['tag'],
+                'type': source['type'],
+                'schedule': source['schedule'],
+                'pair': i,
+                'data': subarray,
+                'Y': datetime.now().year,
+                'M': datetime.now().month,
+                'D': datetime.now().day,
+                'H': datetime.now().hour,
+                'MN': datetime.now().minute,
+                'S': datetime.now().second
+            })
+        return mylist
     else:
-        mydata['tag'] = source['tag']
-        mydata['type'] = source['type']
-        mydata['schedule'] = source['schedule']
-        mydata["data"] = array
-        mydata['Y'] = datetime.now().year
-        mydata['M'] = datetime.now().month
-        mydata['D'] = datetime.now().day
-        mydata['H'] = datetime.now().hour
-        mydata['MN'] = datetime.now().minute
-        mydata['S'] = datetime.now().second
-        return mydata
+        mylist.append({
+            'tag': source['tag'],
+            'type': source['type'],
+            'schedule': source['schedule'],
+            'data': array,
+            'Y': datetime.now().year,
+            'M': datetime.now().month,
+            'D': datetime.now().day,
+            'H': datetime.now().hour,
+            'MN': datetime.now().minute,
+            'S': datetime.now().second
+        })
+        return mylist
 
 
 tl = Timeloop()
-
-
-if __name__ == '__main__':
-    tl.start(block=True)
 
 
 @tl.job(interval=timedelta(seconds=30))
@@ -113,24 +117,26 @@ def job_info():
     with open('configuration_source.json') as json_file:
         data = json.load(json_file)
         for source in data['DataSources']['Source']:
-            post = connect_db(connect_mongo('10.8.8.1', 27017), source['database'], 'log')
-            post.find({'tag': source['tag']}).sort({'$natural': 1}).limit(5)
+            post = connect_db(connect_mongo('10.8.8.1', 27017), source['database'], source['collection'])
+            result = post.find({'tag': source['tag']}).limit(2)
+            print(result)
 
 
-@tl.job(interval=timedelta(seconds=86400))
+@tl.job(interval=timedelta(seconds=10))
 def job_daily():
     try:
         with open('configuration_source.json') as json_file:
             data = json.load(json_file)
         for source in data['DataSources']['Source']:
-            if source['type'] == "daily":
+            if source['schedule'] == "daily":
                 array = make_request(source['ticker_url'])
                 post = connect_db(connect_mongo('10.8.8.1', 27017), source['database'], source['collection'])
-                mydata = get_ticker_data(array, source)
-                post.insert_one(mydata)
+                mylist = get_ticker_data(array, source)
+                post.insert_many(mylist)
     except Exception as e:
         print(e)
 
-
+if __name__ == '__main__':
+    tl.start(block=True)
 
 
