@@ -112,7 +112,7 @@ def get_ticker_data(array, source: dict):
 tl = Timeloop()
 
 
-@tl.job(interval=timedelta(seconds=30))
+@tl.job(interval=timedelta(seconds=600))
 def job_info():
     with open('configuration_source.json') as json_file:
         data = json.load(json_file)
@@ -123,7 +123,7 @@ def job_info():
                 print(i)
 
 
-@tl.job(interval=timedelta(seconds=10))
+@tl.job(interval=timedelta(seconds=86400))
 def job_daily():
     try:
         with open('configuration_source.json') as json_file:
@@ -136,6 +136,21 @@ def job_daily():
                 post.insert_many(mylist)
     except Exception as e:
         print(e)
+
+@tl.job(interval=timedelta(seconds=3600))
+def job_hourly():
+    try:
+        with open('configuration_source.json') as json_file:
+            data = json.load(json_file)
+        for source in data['DataSources']['Source']:
+            if source['schedule'] == "hourly":
+                array = make_request(source['ticker_url'])
+                post = connect_db(connect_mongo('10.8.8.1', 27017), source['database'], source['collection'])
+                mylist = get_ticker_data(array, source)
+                post.insert_many(mylist)
+    except Exception as e:
+        print(e)
+
 
 if __name__ == '__main__':
     tl.start(block=True)
