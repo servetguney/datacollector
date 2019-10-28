@@ -40,19 +40,18 @@ def job_info():
         for source in data['DataSources']['Source']:
             array = make_request(source['ticker_url'])
             print(source['ticker_url'])
-            print(array)
             post = connect_db(connect_mongo('10.8.8.1', 27017), source['database'], 'test')
             post.insert_one({'source': 'pari'})
-            print(source['tag'])
-            cursor = post.find({'source': source['tag']}, {'source': 1})
             mydata = {}
             mydata['source'] = source['tag']
             mydata['timeM'] = datetime.now().month
-
             mydata['type'] = source['type']
-            print(type(cursor))
-            for i in cursor:
-                print(i["source"])
+            if type(array) == list:
+                array = array[0]
+            for i in array.keys():
+                mydata[i] = array[i]
+                print([i,array[i]])
+
 
 def timeinfo():
     print(time.ctime())
@@ -62,4 +61,4 @@ def timeinfo():
     print(datetime.now().minute)
     print(datetime.now().second)
 
-timeinfo()
+job_info()

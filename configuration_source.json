@@ -2,42 +2,47 @@
   "DataSources": {
     "Source": [
       {
+        "type": "feed",
         "database": "currency",
         "collection": "crypto",
         "tag": "pari",
-        "type": "daily",
-        "date": "None",
+        "dtype": "dict",
+        "dformat": "Multiple",
         "ticker_url": "https://www.paribu.com/ticker",
         "schedule": "daily",
         "subentity": ["default"]
       },
       {
+        "type": "feed",
         "database": "currency",
         "collection": "crypto",
         "tag": "pari",
-        "type": "hourly",
-        "date": "None",
+        "schedule": "hourly",
+        "dtype": "dict",
+        "dformat": "Multiple",
         "ticker_url": "https://www.paribu.com/ticker",
-        "schedule": "daily",
         "subentity": ["default"]
       },
       {
+        "type": "feed",
         "database": "currency",
         "collection": "crypto",
         "tag": "btcturk",
-        "type": "daily",
-        "date": "None",
+        "dtype": "list",
+        "dformat": "Multiple",
         "ticker_url": "https://www.btcturk.com/api/ticker",
         "schedule": "daily",
         "subentity": ["default"]
       },
       {
+        "type": "feed",
         "database": "currency",
         "collection": "crypto",
         "tag": "koinim",
-        "type": "daily",
-        "date": "None",
-        "ticker_url": "https://koinim.com/api/v1/ticker/BTC_TRY/",
+        "dtype": "dict",
+        "dformat": "Single",
+        "ticker_url": "https://koinim.com/api/v1/market/",
+        "market_url": "https://koinim.com/api/v1/ticker/",
         "schedule": "daily",
         "subentity": ["default"]
       }
