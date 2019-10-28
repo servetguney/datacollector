@@ -38,19 +38,10 @@ def job_info():
     with open('configuration_source.json') as json_file:
         data = json.load(json_file)
         for source in data['DataSources']['Source']:
-            array = make_request(source['ticker_url'])
-            print(source['ticker_url'])
-            post = connect_db(connect_mongo('10.8.8.1', 27017), source['database'], 'test')
-            post.insert_one({'source': 'pari'})
-            mydata = {}
-            mydata['source'] = source['tag']
-            mydata['timeM'] = datetime.now().month
-            mydata['type'] = source['type']
-            if type(array) == list:
-                array = array[0]
-            for i in array.keys():
-                mydata[i] = array[i]
-                print([i,array[i]])
+            post = connect_db(connect_mongo('10.8.8.1', 27017), source['database'], source['collection'])
+            result = post.find({'tag': source['tag']}).sort([('Y',-1),('M',-1),('D',-1),('H',-1),('MN',-1),('S',-1)]).limit(1)
+            for i in result:
+                print(i)
 
 
 def timeinfo():

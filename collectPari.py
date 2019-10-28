@@ -118,8 +118,9 @@ def job_info():
         data = json.load(json_file)
         for source in data['DataSources']['Source']:
             post = connect_db(connect_mongo('10.8.8.1', 27017), source['database'], source['collection'])
-            result = post.find({'tag': source['tag']}).limit(2)
-            print(result)
+            result = post.find({'tag': source['tag']}).sort([('Y',-1),('M',-1),('D',-1),('H',-1),('MN',-1),('S',-1)]).limit(1)
+            for i in result:
+                print(i)
 
 
 @tl.job(interval=timedelta(seconds=10))
