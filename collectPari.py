@@ -154,7 +154,6 @@ def job_hourly():
 
 
 if __name__ == '__main__':
-    print("The test")
     tl.start(block=True)
 
 
