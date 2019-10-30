@@ -34,7 +34,7 @@ def make_request(address):
         make_request(address)
 
 
-def add_log(source, collection ,log):
+def add_log(source, collection, log):
     try:
         post = connect_db(connect_mongo('10.8.8.1', 27017), source['database'], collection)
         post.insert_one(log)
