@@ -35,11 +35,23 @@ def job_info():
 def run_query(database,collection):
     post = connect_db(connect_mongo('10.8.8.1', 27017), database, collection)
     query = {'tag': 'pari', 'schedule': "hourly", 'pair': "BTC_TL"}
-    project = {"pair": 1, "data.volume":1, "D": 1, "H": 1}
-    sortq = [("D", -1),("H", -1)]
+    project = {"pair": 1, "data.volume": 1, "data.last": 1, "M": 1, "D": 1, "H": 1, "_id":0}
+    sortq = [("M",-1),("D", -1),("H", -1)]
     result = post.find(query, project).sort(sortq)
     for i in result:
         print(i)
+
+
+def get_average(tag, pair,database,collection):
+    post = connect_db(connect_mongo('10.8.8.1', 27017), database, collection)
+    query = {'tag': tag, 'schedule': "hourly", 'pair': pair}
+    project = {"pair": 1, "data.volume":1,"data.last":1,"M":1,"D": 1, "H": 1, "_id":0}
+    sortq = [("M",-1),("D", -1),("H", -1)]
+    result = post.find(query, project).sort(sortq)
+    # Insert Day - [Total Volume, Number of Hour, Month, Day]
+    averageA = []
+    for i in result:
+        averageA.insert([])
 
 
 run_query("currency","crypto")
